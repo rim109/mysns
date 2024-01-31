@@ -17,16 +17,16 @@ class LetterController(
     @GetMapping("/letter/{letterId}")
     fun getLetter(
         @PathVariable letterId: Long
-    ): ResponseEntity<LetterResponse>{
-     return ResponseEntity
-         .status(HttpStatus.OK)
-         .body(letterService.getLetter(letterId))
+    ): ResponseEntity<LetterResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(letterService.getLetter(letterId))
     }
 
     @DeleteMapping("/letter/{letterId}")
     fun deleteLetter(
         @PathVariable letterId: Long
-    ): ResponseEntity<Unit>{
+    ): ResponseEntity<Unit> {
         letterService.deleteLetter(letterId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
