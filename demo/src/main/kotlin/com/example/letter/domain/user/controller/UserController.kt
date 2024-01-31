@@ -1,0 +1,39 @@
+package com.example.letter.domain.user.controller
+
+import com.example.letter.domain.user.dto.LoginRequest
+import com.example.letter.domain.user.dto.LoginResponse
+import com.example.letter.domain.user.dto.SignupRequest
+import com.example.letter.domain.user.dto.UserResponse
+import com.example.letter.domain.user.service.UserService
+import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+class UserController(
+    private val userService: UserService
+) {
+
+    @Operation(summary = "로그인")
+    @PostMapping("/login")
+    fun login(
+        @RequestBody request: LoginRequest
+    ): ResponseEntity<LoginResponse> {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.login(request))
+    }
+
+    @Operation(summary = "회원가입")
+    @PostMapping("/signup")
+    fun signup(
+        @Valid @RequestBody request: SignupRequest
+    ): ResponseEntity<UserResponse> {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(request))
+    }
+
+
+}
