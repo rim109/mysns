@@ -3,6 +3,7 @@ package com.example.letter.domain.admin.controller
 import com.example.letter.domain.admin.service.AdminService
 import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,6 +14,7 @@ class AdminController(
     private val adminService: AdminService
 ) {
 
+    @Operation(summary = "letter 전체 조회")
     @GetMapping("/letter/{letterId}")
     fun getListLetter(
         @PathVariable letterId: Long
@@ -22,6 +24,7 @@ class AdminController(
             .body(adminService.getLetterList())
     }
 
+    @Operation(summary = "letter 수정")
     @PatchMapping("/letter/{letterId}")
     fun adminUpdateLetter(
         @PathVariable letterId: Long,
@@ -33,6 +36,7 @@ class AdminController(
             .body(adminService.adminUpdateLetter(letterId, request))
     }
 
+    @Operation(summary = "letter 삭제")
     @DeleteMapping("/letter/{letterId}")
     fun adminDeleteLetter(
         @PathVariable letterId: Long
