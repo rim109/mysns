@@ -19,8 +19,8 @@ class AdminServiceImpl(
 
     override fun adminUpdateLetter(letterId: Long, request: LetterRequest): LetterResponse {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw IllegalArgumentException("DDD")
-        letter.nickname = request.nickname
-        letter.content = request.content
+        letter.nickname = request.nickname ?: letter.nickname
+        letter.content = request.content ?: letter.content
 
         return letter.toResponse()
     }

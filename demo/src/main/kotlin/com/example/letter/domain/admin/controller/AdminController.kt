@@ -14,17 +14,15 @@ class AdminController(
     private val adminService: AdminService
 ) {
 
-    @Operation(summary = "letter 전체 조회")
-    @GetMapping("/letter/{letterId}")
-    fun getListLetter(
-        @PathVariable letterId: Long
-    ): ResponseEntity<List<LetterResponse>> {
+    @Operation(summary = "letter 전체 조회 ONLY ADMIN")
+    @GetMapping("/letter")
+    fun getListLetter(): ResponseEntity<List<LetterResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(adminService.getLetterList())
     }
 
-    @Operation(summary = "letter 수정")
+    @Operation(summary = "letter 수정 ONLY ADMIN")
     @PatchMapping("/letter/{letterId}")
     fun adminUpdateLetter(
         @PathVariable letterId: Long,
@@ -36,7 +34,7 @@ class AdminController(
             .body(adminService.adminUpdateLetter(letterId, request))
     }
 
-    @Operation(summary = "letter 삭제")
+    @Operation(summary = "letter 삭제 ONLY ADMIN")
     @DeleteMapping("/letter/{letterId}")
     fun adminDeleteLetter(
         @PathVariable letterId: Long
