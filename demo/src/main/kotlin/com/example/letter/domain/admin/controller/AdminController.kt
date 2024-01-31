@@ -1,8 +1,8 @@
 package com.example.letter.domain.admin.controller
 
 import com.example.letter.domain.admin.service.AdminService
+import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
-import com.example.letter.domain.letter.service.LetterService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,26 +16,27 @@ class AdminController(
     @GetMapping("/letter/{letterId}")
     fun getListLetter(
         @PathVariable letterId: Long
-    ): ResponseEntity<List<LetterResponse>>{
-     return ResponseEntity
-         .status(HttpStatus.OK)
-         .body(adminService.getLetterList())
+    ): ResponseEntity<List<LetterResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(adminService.getLetterList())
     }
 
     @PatchMapping("/letter/{letterId}")
     fun adminUpdateLetter(
-        @PathVariable letterId: Long
-    ): ResponseEntity<LetterResponse>{
+        @PathVariable letterId: Long,
+        @RequestBody request: LetterRequest
+    ): ResponseEntity<LetterResponse> {
         adminService.adminDeleteLetter(letterId)
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(adminService.adminUpdateLetter(letterId))
+            .body(adminService.adminUpdateLetter(letterId, request))
     }
 
     @DeleteMapping("/letter/{letterId}")
     fun adminDeleteLetter(
         @PathVariable letterId: Long
-    ): ResponseEntity<Unit>{
+    ): ResponseEntity<Unit> {
         adminService.adminDeleteLetter(letterId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
