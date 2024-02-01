@@ -1,6 +1,7 @@
 package com.example.letter.domain.user.service
 
 import com.example.letter.common.exception.InvalidInputException
+import com.example.letter.common.exception.InvalidRoleException
 import com.example.letter.common.exception.ModelNotFoundException
 import com.example.letter.common.security.jwt.JwtPlugin
 import com.example.letter.domain.user.dto.LoginRequest
@@ -9,7 +10,9 @@ import com.example.letter.domain.user.dto.SignupRequest
 import com.example.letter.domain.user.dto.UserResponse
 import com.example.letter.domain.user.model.User
 import com.example.letter.domain.user.model.UserRole
+import com.example.letter.domain.user.model.toResponse
 import com.example.letter.domain.user.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -30,15 +33,16 @@ class UserServiceImpl(
                 birthDate = request.birthDate,
                 phoneNumber = request.phoneNumber,
                 info = request.info,
-                role = when (request.role.toString()){
+                role = when (request.role){
                     "USER" -> UserRole.USER
                     "ADMIN" -> UserRole.ADMIN
-                    else -> throw InvalidInputException("dddd")
+                    else -> throw InvalidRoleException(request.role)
 
-                }.toString()
+                }
+
             )
         )
-        return UserResponse.from(user)
+        return user.toResponse()
     }
 
     override fun login(request: LoginRequest): LoginResponse {
@@ -48,8 +52,13 @@ class UserServiceImpl(
             token = jwtPlugin.generateAccessToken(
                 subject = user.id.toString(),
                 email = user.email,
-                role = user.role
+                role = user.role.toString()
             )
         )
+    }
+
+    override fun getUser(userId: Long): UserResponse {
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        return user.toResponse()
     }
 }

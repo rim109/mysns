@@ -1,6 +1,7 @@
 package com.example.letter.common.exception
 
 import com.example.letter.common.exception.dto.BaseResponse
+import com.example.letter.common.exception.dto.ErrorResponse
 import com.example.letter.common.status.ResultCode
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,5 +29,19 @@ class CustomExceptionHandler {
     protected fun invalidInputException(ex: InvalidInputException): ResponseEntity<BaseResponse<Map<String, String>>> {
         val errors = mapOf(ex.fieldName to (ex.message ?: "Not Exception Message"))
         return ResponseEntity(BaseResponse(ResultCode.ERROR.name, errors, ResultCode.ERROR.msg), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(ModelNotFoundException::class)
+    fun handleModelNotFoundException(e: ModelNotFoundException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(ErrorResponse(e.message))
+    }
+
+    @ExceptionHandler(InvalidRoleException::class)
+    fun handleInvalidRoleException(e: InvalidRoleException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse(e.message))
     }
 }
