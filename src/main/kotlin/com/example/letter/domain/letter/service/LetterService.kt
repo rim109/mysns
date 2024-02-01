@@ -7,7 +7,7 @@ interface LetterService {
 
     fun getLetter(letterId: Long): LetterResponse
 
-    fun createLetter(request: LetterRequest): LetterResponse
+    fun createLetter(userId: Long, request: LetterRequest): LetterResponse
 
     fun deleteLetter(letterId: Long)
 }

@@ -1,31 +1,33 @@
 package com.example.letter.domain.user.model
 
 import com.example.letter.common.model.BaseTime
+import com.example.letter.domain.user.dto.UserResponse
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "app_user")
 class User(
-    @Column(nullable = false)
+    @Column(name = "nickname", nullable = false)
     var nickname: String,
 
-    @Column(nullable = false)
+    @Column(name = "email", nullable = false)
     var email: String,
 
-    @Column(nullable = false)
+    @Column(name = "password",nullable = false)
     var password: String,
 
-    @Column(nullable = false)
+    @Column(name = "birthDate",nullable = false)
     var birthDate: String,
 
-    @Column(nullable = false)
+    @Column(name = "phoneNumber",nullable = false)
     var phoneNumber: String,
 
-    @Column(nullable = false)
+    @Column(name = "info",nullable = false)
     var info: String,
 
-    @Column(nullable = false)
-    var role: String,
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role",nullable = false)
+    var role: UserRole,
 
 
     ) : BaseTime() {
@@ -33,4 +35,18 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
+}
+
+fun User.toResponse(): UserResponse {
+    return UserResponse(
+        id = id!!,
+        email = email,
+        nickname = nickname,
+        birthDate = birthDate,
+        phoneNumber = phoneNumber,
+        info = info,
+        role = role.name,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt
+    )
 }

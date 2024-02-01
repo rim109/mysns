@@ -11,4 +11,6 @@ interface UserService {
 
     fun login(request: LoginRequest): LoginResponse
 
+    fun getUser(userId: Long): UserResponse
+
 }
