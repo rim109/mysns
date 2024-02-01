@@ -1,6 +1,10 @@
 package com.example.letter.domain.letter.dto
 
+import jakarta.validation.constraints.Max
+
 data class LetterRequest(
+    @Max(500)
     val nickname: String?,
-    val content: String?
+    @Max(5000)
+    val content: String
 )
