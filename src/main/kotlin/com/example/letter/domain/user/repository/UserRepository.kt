@@ -9,3 +9,7 @@ interface UserRepository : JpaRepository<User, Long> {
     fun existsByEmail(email: String): Boolean
 
 }
+
+interface UserRoleRepository: JpaRepository<User,Long>{
+
+}
