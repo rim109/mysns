@@ -8,9 +8,9 @@ import com.example.letter.domain.user.dto.UserUpdate
 interface AdminService {
     fun getLetterList(): List<LetterResponse>
 
-    fun adminUpdateLetter(letterId: Long, request: LetterRequest): LetterResponse
+    fun adminUpdateLetter(userId: Long, letterId: Long, request: LetterRequest): LetterResponse
 
-    fun adminDeleteLetter(letterId: Long)
+    fun adminDeleteLetter(userId: Long, letterId: Long)
 
     fun getUserList(): List<UserResponse>
 

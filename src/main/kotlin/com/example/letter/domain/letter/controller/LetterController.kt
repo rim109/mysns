@@ -5,8 +5,10 @@ import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
 import com.example.letter.domain.letter.service.LetterService
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -16,6 +18,7 @@ class LetterController(
 ) {
 
     @Operation(summary = "letter 단건 조회")
+    @PreAuthorize("#userPrincipal.id == #userId")
     @GetMapping("/letter/{letterId}")
     fun getLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
@@ -30,7 +33,7 @@ class LetterController(
     @PostMapping("/letter/{letterId}")
     fun createLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @RequestBody request: LetterRequest
+        @Valid @RequestBody request: LetterRequest
     ): ResponseEntity<LetterResponse> {
         val userId = userPrincipal.id
         return ResponseEntity
@@ -39,12 +42,14 @@ class LetterController(
     }
 
     @Operation(summary = "letter 삭제")
+    @PreAuthorize("#userPrincipal.id == #userId")
     @DeleteMapping("/letter/{letterId}")
     fun deleteLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable letterId: Long
     ): ResponseEntity<Unit> {
-        letterService.deleteLetter(letterId)
+        val userId = userPrincipal.id
+        letterService.deleteLetter(userId, letterId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()

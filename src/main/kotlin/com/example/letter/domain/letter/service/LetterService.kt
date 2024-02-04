@@ -9,5 +9,5 @@ interface LetterService {
 
     fun createLetter(userId: Long, request: LetterRequest): LetterResponse
 
-    fun deleteLetter(letterId: Long)
+    fun deleteLetter(userId: Long, letterId: Long)
 }

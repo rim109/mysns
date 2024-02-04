@@ -28,16 +28,16 @@ class AdminServiceImpl(
     }
 
     @Transactional
-    override fun adminUpdateLetter(letterId: Long, request: LetterRequest): LetterResponse {
+    override fun adminUpdateLetter(userId: Long, letterId: Long, request: LetterRequest): LetterResponse {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter",letterId)
         letter.nickname = request.nickname ?: letter.nickname
-        letter.content = request.content ?: letter.content
+        letter.content = request.content
 
         return letter.toResponse()
     }
 
     @Transactional
-    override fun adminDeleteLetter(letterId: Long) {
+    override fun adminDeleteLetter(userId: Long, letterId: Long) {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter",letterId)
         letterRepository.delete(letter)
         letterRepository.save(letter)
@@ -50,19 +50,19 @@ class AdminServiceImpl(
     @Transactional
     override fun updateUser(userId: Long, request: UserUpdate): String {
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User",userId)
-        when (request.role.toString()){
-            "USER" -> UserRole.USER
-            "ADMIN" -> UserRole.ADMIN
-            else -> throw InvalidInputException("dddd")
-        }
-        user.role = request.role
-        userRepository.save(user)
-
-//        if(user.role == UserRole.USER || user.role == UserRole.ADMIN){
-//            user.role = request.role
-//
-//            userRepository.save(user)
+//        when (request.role.toString()){
+//            "USER" -> UserRole.USER
+//            "ADMIN" -> UserRole.ADMIN
+//            else -> throw InvalidInputException("dddd")
 //        }
+//        user.role = request.role
+//        userRepository.save(user)
+
+        if(user.role == UserRole.USER || user.role == UserRole.ADMIN){
+            user.role = request.role
+
+            userRepository.save(user)
+        }
 
 
         return "등급이 변경되었습니다."

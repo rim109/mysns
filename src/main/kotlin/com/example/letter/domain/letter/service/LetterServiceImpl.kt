@@ -23,7 +23,7 @@ class LetterServiceImpl(
 
 
     @Transactional
-    override fun createLetter( userId: Long, request: LetterRequest): LetterResponse {
+    override fun createLetter(userId: Long, request: LetterRequest): LetterResponse {
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User",userId)
         val createLetter = letterRepository.save(
             Letter(
@@ -36,7 +36,7 @@ class LetterServiceImpl(
         return createLetter.toResponse()
     }
     @Transactional
-    override fun deleteLetter(letterId: Long) {
+    override fun deleteLetter(userId: Long, letterId: Long) {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter",letterId)
         return letterRepository.delete(letter)
     }

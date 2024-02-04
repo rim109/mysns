@@ -1,5 +1,6 @@
 package com.example.letter.domain.admin.controller
 
+import com.example.letter.common.security.jwt.UserPrincipal
 import com.example.letter.domain.admin.service.AdminService
 import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/admins")
@@ -30,21 +32,25 @@ class AdminController(
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/letter/{letterId}")
     fun adminUpdateLetter(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable letterId: Long,
         @RequestBody request: LetterRequest
     ): ResponseEntity<LetterResponse> {
+        val userId = userPrincipal.id
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(adminService.adminUpdateLetter(letterId, request))
+            .body(adminService.adminUpdateLetter(userId, letterId, request))
     }
 
     @Operation(summary = "letter 삭제 ONLY ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/letter/{letterId}")
     fun adminDeleteLetter(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable letterId: Long
     ): ResponseEntity<Unit> {
-        adminService.adminDeleteLetter(letterId)
+        val userId = userPrincipal.id
+        adminService.adminDeleteLetter(letterId,userId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
