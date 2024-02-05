@@ -19,7 +19,7 @@ class LetterController(
 
     @Operation(summary = "letter 단건 조회")
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/letter/{letterId}")
+    @GetMapping("/letters/{letterId}")
     fun getLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable letterId: Long
@@ -31,7 +31,7 @@ class LetterController(
 
     @Operation(summary = "letter 작성")
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("/letter/{letterId}")
+    @PostMapping("/letters")
     fun createLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @Valid @RequestBody request: LetterRequest
@@ -44,7 +44,7 @@ class LetterController(
 
     @Operation(summary = "letter 삭제")
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping("/letter/{letterId}")
+    @DeleteMapping("/letters/{letterId}")
     fun deleteLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable letterId: Long
