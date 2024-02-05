@@ -8,6 +8,10 @@ import com.example.letter.domain.letter.dto.LetterResponse
 import com.example.letter.domain.user.dto.UserResponse
 import com.example.letter.domain.user.dto.UserUpdate
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -22,10 +26,12 @@ class AdminController(
     @Operation(summary = "letter 전체 조회")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/letter")
-    fun getListLetter(): ResponseEntity<List<LetterResponse>> {
+    fun getListLetter(
+        @PageableDefault(size = 5, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
+    ): ResponseEntity<Page<LetterResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(adminService.getLetterList())
+            .body(adminService.getLetterList(pageable))
     }
 
     @Operation(summary = "letter 수정 ONLY ADMIN")
@@ -59,8 +65,10 @@ class AdminController(
     @Operation(summary = "user 전체 조회 ONLY ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users/{userId}")
-    fun getUserList(): ResponseEntity<List<UserResponse>>{
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.getUserList())
+    fun getUserList(
+        @PageableDefault(size = 5, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
+    ): ResponseEntity<Page<UserResponse>>{
+        return ResponseEntity.status(HttpStatus.OK).body(adminService.getUserList(pageable))
     }
 
     @Operation(summary = "user 등급 승격 ONLY ADMIN")

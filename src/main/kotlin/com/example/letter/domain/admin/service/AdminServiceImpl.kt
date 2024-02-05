@@ -12,7 +12,8 @@ import com.example.letter.domain.user.dto.UserUpdate
 import com.example.letter.domain.user.model.UserRole
 import com.example.letter.domain.user.model.toResponse
 import com.example.letter.domain.user.repository.UserRepository
-import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -23,8 +24,8 @@ class AdminServiceImpl(
     private val userRepository: UserRepository,
     private val likeRepository: LikeRepository
 ) : AdminService {
-    override fun getLetterList(): List<LetterResponse> {
-        return letterRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).map { it.toResponse() }
+    override fun getLetterList(pageable: Pageable): Page<LetterResponse> {
+        return letterRepository.findAll(pageable).map { it.toResponse() }
     }
 
     @Transactional
@@ -46,8 +47,12 @@ class AdminServiceImpl(
         letterRepository.save(letter)
     }
 
-    override fun getUserList(): List<UserResponse> {
-        return userRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).map { it.toResponse() }
+//    override fun getUserList(): List<UserResponse> {
+//        return userRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).map { it.toResponse() }
+//    }
+
+    override fun getUserList(pageable: Pageable): Page<UserResponse> {
+        return userRepository.findAll(pageable).map { it.toResponse() }
     }
 
 
@@ -59,11 +64,8 @@ class AdminServiceImpl(
             throw HttpMessageNotReadableException("Choose ADMIN OR USER")
         } else {
             user.role = request.role
-
             userRepository.save(user)
         }
-
-
         return "등급이 변경되었습니다."
     }
 }
