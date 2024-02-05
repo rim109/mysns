@@ -1,7 +1,10 @@
 package com.example.letter.domain.user.model
 
+import com.example.letter.common.exception.EmailExistException
+import com.example.letter.common.exception.NicknameExistException
 import com.example.letter.common.model.BaseTime
 import com.example.letter.domain.user.dto.UserResponse
+import com.example.letter.domain.user.repository.UserRepository
 import jakarta.persistence.*
 
 @Entity
@@ -49,4 +52,14 @@ fun User.toResponse(): UserResponse {
         createdAt = this.createdAt,
         updatedAt = this.updatedAt
     )
+}
+
+fun checkingEmailAndNicknameExists(email: String, nickname: String, userRepository: UserRepository) {
+    if (userRepository.existsByEmail(email)) {
+        throw EmailExistException(email)
+    }
+
+    if (userRepository.existsByNickname(nickname)) {
+        throw NicknameExistException(nickname)
+    }
 }

@@ -8,9 +8,7 @@ import com.example.letter.domain.user.dto.LoginRequest
 import com.example.letter.domain.user.dto.LoginResponse
 import com.example.letter.domain.user.dto.SignupRequest
 import com.example.letter.domain.user.dto.UserResponse
-import com.example.letter.domain.user.model.User
-import com.example.letter.domain.user.model.UserRole
-import com.example.letter.domain.user.model.toResponse
+import com.example.letter.domain.user.model.*
 import com.example.letter.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -23,10 +21,7 @@ class UserServiceImpl(
     private val jwtPlugin: JwtPlugin
 ) : UserService {
     override fun signup(request: SignupRequest): UserResponse {
-        var user: User? = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null)
-        if (user != null){
-            throw InvalidInputException("email", "이미 등록된 email 입니다.")
-        }
+        checkingEmailAndNicknameExists(request.email, request.nickname, userRepository)
 
 
         val users = userRepository.save(
