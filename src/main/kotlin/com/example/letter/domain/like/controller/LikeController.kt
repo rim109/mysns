@@ -17,7 +17,7 @@ class LikeController(
 ) {
     @Operation(summary = "좋아요 기능")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @PatchMapping
+    @PatchMapping("/{letterId}")
     fun likeLetter(
         @PathVariable letterId: Long,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
