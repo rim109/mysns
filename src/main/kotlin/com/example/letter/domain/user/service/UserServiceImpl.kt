@@ -1,6 +1,5 @@
 package com.example.letter.domain.user.service
 
-import com.example.letter.common.exception.InvalidInputException
 import com.example.letter.common.exception.InvalidRoleException
 import com.example.letter.common.exception.ModelNotFoundException
 import com.example.letter.common.security.jwt.JwtPlugin
@@ -22,7 +21,8 @@ class UserServiceImpl(
 ) : UserService {
     override fun signup(request: SignupRequest): UserResponse {
         checkingEmailAndNicknameExists(request.email, request.nickname, userRepository)
-
+        passwordNoHaveNickname(request.nickname,request.password)
+        passwordMisMatch(request.password, request.passwordConfirm)
 
         val users = userRepository.save(
             User(
@@ -36,9 +36,7 @@ class UserServiceImpl(
                     "USER" -> UserRole.USER
                     "ADMIN" -> UserRole.ADMIN
                     else -> throw InvalidRoleException(request.role)
-
                 }
-
             )
         )
         return users.toResponse()

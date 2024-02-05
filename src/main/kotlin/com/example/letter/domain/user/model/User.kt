@@ -2,6 +2,8 @@ package com.example.letter.domain.user.model
 
 import com.example.letter.common.exception.EmailExistException
 import com.example.letter.common.exception.NicknameExistException
+import com.example.letter.common.exception.PasswordMismatchException
+import com.example.letter.common.exception.PasswordNoHaveNicknameException
 import com.example.letter.common.model.BaseTime
 import com.example.letter.domain.user.dto.UserResponse
 import com.example.letter.domain.user.repository.UserRepository
@@ -16,20 +18,20 @@ class User(
     @Column(name = "email", nullable = false)
     var email: String,
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     var password: String,
 
-    @Column(name = "birthDate",nullable = false)
+    @Column(name = "birthDate", nullable = false)
     var birthDate: String,
 
-    @Column(name = "phoneNumber",nullable = false)
+    @Column(name = "phoneNumber", nullable = false)
     var phoneNumber: String,
 
-    @Column(name = "info",nullable = false)
+    @Column(name = "info", nullable = false)
     var info: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role",nullable = false)
+    @Column(name = "role", nullable = false)
     var role: UserRole,
 
 
@@ -62,4 +64,13 @@ fun checkingEmailAndNicknameExists(email: String, nickname: String, userReposito
     if (userRepository.existsByNickname(nickname)) {
         throw NicknameExistException(nickname)
     }
+}
+
+fun passwordMisMatch(password: String, passwordConfirm: String) {
+    if (password != passwordConfirm) throw PasswordMismatchException(password, passwordConfirm)
+}
+
+fun passwordNoHaveNickname(nickname: String, password: String) {
+    val isExist = nickname.contains(password)
+    if (isExist) throw PasswordNoHaveNicknameException(nickname, password)
 }
