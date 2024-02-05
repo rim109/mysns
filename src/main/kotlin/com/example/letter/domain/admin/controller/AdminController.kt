@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/admins")
 @RestController
 class AdminController(
-    private val adminService: AdminService
+    private val adminService: AdminService,
 ) {
-
     @Operation(summary = "letter 전체 조회")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/letter")

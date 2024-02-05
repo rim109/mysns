@@ -6,6 +6,7 @@ import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
 import com.example.letter.domain.letter.model.toResponse
 import com.example.letter.domain.letter.repository.LetterRepository
+import com.example.letter.domain.like.repository.LikeRepository
 import com.example.letter.domain.user.dto.UserResponse
 import com.example.letter.domain.user.dto.UserUpdate
 import com.example.letter.domain.user.model.UserRole
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 class AdminServiceImpl(
     private val letterRepository: LetterRepository,
     private val userRepository: UserRepository,
+    private val likeRepository: LikeRepository
 ) : AdminService {
     override fun getLetterList(): List<LetterResponse> {
         return letterRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).map { it.toResponse() }
@@ -30,6 +32,9 @@ class AdminServiceImpl(
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter", letterId)
         letter.nickname = request.nickname ?: letter.nickname
         letter.content = request.content
+
+        val numLiked = likeRepository.countLikeByLetterId(letterId)
+        letter.numLike = numLiked
 
         return letter.toResponse()
     }

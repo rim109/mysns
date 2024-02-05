@@ -4,6 +4,7 @@ data class LetterResponse(
     val id: Long,
     val nickname: String,
     val content: String,
+    val numLike: Int,
     val createdAt: String,
     val updatedAt: String
 )
