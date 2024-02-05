@@ -38,7 +38,7 @@ class UserController(
 
     @Operation(summary = "user 단건 조회")
     @GetMapping("/users/{userId}")
-    fun getUser(@PathVariable userId: Long): ResponseEntity<UserResponse>{
+    fun getUser(@PathVariable userId: Long): ResponseEntity<UserResponse> {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(userId))
     }
 }

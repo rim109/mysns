@@ -18,7 +18,7 @@ class LetterController(
 ) {
 
     @Operation(summary = "letter 단건 조회")
-    @PreAuthorize("#userPrincipal.id == #userId")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/letter/{letterId}")
     fun getLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
@@ -30,6 +30,7 @@ class LetterController(
     }
 
     @Operation(summary = "letter 작성")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/letter/{letterId}")
     fun createLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
@@ -38,11 +39,11 @@ class LetterController(
         val userId = userPrincipal.id
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(letterService.createLetter(userId,request))
+            .body(letterService.createLetter(userId, request))
     }
 
     @Operation(summary = "letter 삭제")
-    @PreAuthorize("#userPrincipal.id == #userId")
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/letter/{letterId}")
     fun deleteLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
