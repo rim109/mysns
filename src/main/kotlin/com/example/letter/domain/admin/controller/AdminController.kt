@@ -1,5 +1,6 @@
 package com.example.letter.domain.admin.controller
 
+import com.example.letter.common.exception.dto.BaseResponse
 import com.example.letter.common.security.jwt.UserPrincipal
 import com.example.letter.domain.admin.service.AdminService
 import com.example.letter.domain.letter.dto.LetterRequest
@@ -19,7 +20,7 @@ class AdminController(
     private val adminService: AdminService
 ) {
 
-    @Operation(summary = "letter 전체 조회 ONLY ADMIN")
+    @Operation(summary = "letter 전체 조회")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/letter")
     fun getListLetter(): ResponseEntity<List<LetterResponse>> {
@@ -69,8 +70,9 @@ class AdminController(
     fun updateUser(
         @PathVariable userId: Long,
         @RequestBody userUpdate: UserUpdate,
-    ): ResponseEntity<Any>{
-        return ResponseEntity.status(HttpStatus.OK).body("dDD")
+    ): BaseResponse<UserUpdate> {
+        val resultMsg: String = adminService.updateUser(userId, userUpdate)
+        return BaseResponse(message = resultMsg)
     }
 
 }

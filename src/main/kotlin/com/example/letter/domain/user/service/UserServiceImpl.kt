@@ -23,9 +23,13 @@ class UserServiceImpl(
     private val jwtPlugin: JwtPlugin
 ) : UserService {
     override fun signup(request: SignupRequest): UserResponse {
-        var email = userRepository.existsByEmail(request.email)
+        var user: User? = userRepository.findByEmail(request.email) ?: throw ModelNotFoundException("User", null)
+        if (user != null){
+            throw InvalidInputException("email", "이미 등록된 email 입니다.")
+        }
 
-        val user = userRepository.save(
+
+        val users = userRepository.save(
             User(
                 nickname = request.nickname,
                 email = request.email,
@@ -42,7 +46,7 @@ class UserServiceImpl(
 
             )
         )
-        return user.toResponse()
+        return users.toResponse()
     }
 
     override fun login(request: LoginRequest): LoginResponse {
