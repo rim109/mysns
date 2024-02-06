@@ -43,6 +43,7 @@ fun Letter.toResponse(): LetterResponse {
         content = content,
         numLike = liked.size,
         createdAt = this.createdAt,
-        updatedAt = this.updatedAt
+        updatedAt = this.updatedAt,
+        userId = user.id!!
     )
 }

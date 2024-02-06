@@ -1,6 +1,7 @@
 package com.example.letter.domain.letter.controller
 
 import com.example.letter.common.security.jwt.UserPrincipal
+import com.example.letter.domain.letter.dto.DeleteLetterRequest
 import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
 import com.example.letter.domain.letter.service.LetterService
@@ -31,12 +32,11 @@ class LetterController(
 
     @Operation(summary = "letter 작성")
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("/letters")
+    @PostMapping("/users/{userId}/letters")
     fun createLetter(
-        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @PathVariable userId: Long,
         @Valid @RequestBody request: LetterRequest
     ): ResponseEntity<LetterResponse> {
-        val userId = userPrincipal.id
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(letterService.createLetter(userId, request))
@@ -47,10 +47,11 @@ class LetterController(
     @DeleteMapping("/letters/{letterId}")
     fun deleteLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @PathVariable letterId: Long
+        @PathVariable letterId: Long,
+        @RequestBody request: DeleteLetterRequest
     ): ResponseEntity<Unit> {
         val userId = userPrincipal.id
-        letterService.deleteLetter(userId, letterId)
+        letterService.deleteLetter(userId, letterId, request)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
