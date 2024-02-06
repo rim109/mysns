@@ -25,7 +25,7 @@ class AdminController(
 ) {
     @Operation(summary = "letter 전체 조회")
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/letter")
+    @GetMapping("/letters")
     fun getListLetter(
         @PageableDefault(size = 5, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable
     ): ResponseEntity<Page<LetterResponse>> {
@@ -36,7 +36,7 @@ class AdminController(
 
     @Operation(summary = "letter 수정 ONLY ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/letter/{letterId}")
+    @PatchMapping("/letters/{letterId}")
     fun adminUpdateLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable letterId: Long,
@@ -50,7 +50,7 @@ class AdminController(
 
     @Operation(summary = "letter 삭제 ONLY ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/letter/{letterId}")
+    @DeleteMapping("/letters/{letterId}")
     fun adminDeleteLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable letterId: Long
@@ -71,7 +71,7 @@ class AdminController(
         return ResponseEntity.status(HttpStatus.OK).body(adminService.getUserList(pageable))
     }
 
-    @Operation(summary = "user 등급 승격 ONLY ADMIN")
+    @Operation(summary = "user 등급 변경 ONLY ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/users/{userId}")
     fun updateUser(
