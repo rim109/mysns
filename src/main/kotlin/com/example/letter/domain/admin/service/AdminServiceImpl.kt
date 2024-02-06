@@ -92,7 +92,7 @@ class AdminServiceImpl(
         return UserPageResponse(
             content = usersResponseList,
             totalPages = usersPage.totalPages,
-            totalLetter = usersPage.totalElements
+            totalUsers = usersPage.totalElements
         )
     }
 
