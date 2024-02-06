@@ -19,15 +19,16 @@ class LetterController(
 ) {
 
     @Operation(summary = "letter 단건 조회")
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/letters/{letterId}")
+    @PreAuthorize("#userPrincipal.id == #userId")
+    @GetMapping("/users/{userId}/letters/{letterId}")
     fun getLetter(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @PathVariable userId: Long,
         @PathVariable letterId: Long
     ): ResponseEntity<LetterResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(letterService.getLetter(letterId))
+            .body(letterService.getLetter(userId,letterId))
     }
 
     @Operation(summary = "letter 작성")

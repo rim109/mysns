@@ -6,7 +6,7 @@ import com.example.letter.domain.letter.dto.LetterResponse
 
 interface LetterService {
 
-    fun getLetter(letterId: Long): LetterResponse
+    fun getLetter(userId: Long, letterId: Long): LetterResponse
 
     fun createLetter(userId: Long, request: LetterRequest): LetterResponse
 

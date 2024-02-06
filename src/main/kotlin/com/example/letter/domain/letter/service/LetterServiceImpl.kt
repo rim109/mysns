@@ -13,6 +13,7 @@ import com.example.letter.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.nio.file.AccessDeniedException
 
 @Service
 class LetterServiceImpl(
@@ -20,9 +21,8 @@ class LetterServiceImpl(
     private val userRepository: UserRepository,
     private val likeRepository: LikeRepository
 ) : LetterService {
-    override fun getLetter(letterId: Long): LetterResponse {
+    override fun getLetter(userId: Long, letterId: Long): LetterResponse {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter",letterId)
-
         val numLiked = likeRepository.countLikeByLetterId(letterId)
         letter.numLike = numLiked
 
