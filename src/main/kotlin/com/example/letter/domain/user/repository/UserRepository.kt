@@ -12,6 +12,4 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun existsByNickname(nickname: String): Boolean
 
-//    fun findByUser(pageable: Pageable): Page<User>
-
 }

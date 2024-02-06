@@ -5,8 +5,11 @@ import com.example.letter.common.exception.NicknameExistException
 import com.example.letter.common.exception.PasswordMismatchException
 import com.example.letter.common.exception.PasswordNoHaveNicknameException
 import com.example.letter.common.model.BaseTime
+import com.example.letter.domain.letter.model.Letter
+import com.example.letter.domain.letter.model.toResponse
 import com.example.letter.domain.user.dto.UserResponse
 import com.example.letter.domain.user.repository.UserRepository
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
 @Entity
@@ -34,11 +37,19 @@ class User(
     @Column(name = "role", nullable = false)
     var role: UserRole,
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val letters: MutableList<Letter> = mutableListOf(),
+
 
     ) : BaseTime() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
+
+    fun removeLetter(letter: Letter) {
+        letters.remove(letter)
+    }
 
 }
 
@@ -52,7 +63,8 @@ fun User.toResponse(): UserResponse {
         info = info,
         role = role.name,
         createdAt = this.createdAt,
-        updatedAt = this.updatedAt
+        updatedAt = this.updatedAt,
+        letter = letters.map { it.toResponse() }
     )
 }
 
