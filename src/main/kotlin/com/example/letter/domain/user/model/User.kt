@@ -71,6 +71,6 @@ fun passwordMisMatch(password: String, passwordConfirm: String) {
 }
 
 fun passwordNoHaveNickname(nickname: String, password: String) {
-    val isExist = nickname.contains(password)
+    val isExist = password.contains(nickname)
     if (isExist) throw PasswordNoHaveNicknameException(nickname, password)
 }
