@@ -7,3 +7,7 @@ data class PasswordMismatchException(val password: String, val passwordConfirm: 
 data class PasswordNoHaveNicknameException(val nickname: String, val password: String): RuntimeException(
     "비밀번호를 입력 할 때 닉네임과 동일한 문장을 입력하지 마세요"
 )
+
+data class InvalidPasswordException(val password: String) : RuntimeException(
+    "맞지 않은 비밀번호 입니다. 다시 시도해주세요."
+)

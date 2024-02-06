@@ -1,6 +1,8 @@
 package com.example.letter.domain.letter.service
 
+import com.example.letter.common.exception.InvalidPasswordException
 import com.example.letter.common.exception.ModelNotFoundException
+import com.example.letter.domain.letter.dto.DeleteLetterRequest
 import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
 import com.example.letter.domain.letter.model.Letter
@@ -43,8 +45,14 @@ class LetterServiceImpl(
         return createLetter.toResponse()
     }
     @Transactional
-    override fun deleteLetter(userId: Long, letterId: Long) {
+    override fun deleteLetter(userId: Long, letterId: Long, request: DeleteLetterRequest) {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter",letterId)
-        return letterRepository.delete(letter)
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        if (user.password != request.password)
+            throw InvalidPasswordException(request.password)
+        else {
+            user.removeLetter(letter)
+            letterRepository.save(letter)
+        }
     }
 }
