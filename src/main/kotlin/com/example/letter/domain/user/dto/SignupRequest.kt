@@ -31,6 +31,12 @@ data class SignupRequest(
         message = "날짜형식(YYYY-MM-DD)로 입력해주세요"
     )
     val birthDate: String,
+
+    @field: NotBlank
+    @field: Pattern(
+        regexp = "^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$",
+        message = "전화 번호 형식으로 작성해주세요"
+    )
     val phoneNumber: String,
     val info: String,
     val role: String
