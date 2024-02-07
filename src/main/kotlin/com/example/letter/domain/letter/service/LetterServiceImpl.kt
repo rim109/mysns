@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,7 +23,8 @@ import org.springframework.transaction.annotation.Transactional
 class LetterServiceImpl(
     private val letterRepository: LetterRepository,
     private val userRepository: UserRepository,
-    private val likeRepository: LikeRepository
+    private val likeRepository: LikeRepository,
+    private val passwordEncoder: PasswordEncoder
 ) : LetterService {
     override fun getLetter(userId: Long, letterId: Long): LetterResponse {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter",letterId)
@@ -67,11 +69,20 @@ class LetterServiceImpl(
     override fun deleteLetter(userId: Long, letterId: Long, request: DeleteLetterRequest) {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter",letterId)
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
-        if (user.password != request.password)
+
+        val isValidPassword = passwordEncoder.matches(request.password, user.password)
+
+        if (!isValidPassword)
             throw InvalidPasswordException(request.password)
         else {
-            user.removeLetter(letter)
+            letter.deleteLetter()
             letterRepository.save(letter)
         }
     }
+
+//    override fun deleteUser(userId: Long) {
+//        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+//        user.deleteUser()
+//        userRepository.save(user)
+//    }
 }

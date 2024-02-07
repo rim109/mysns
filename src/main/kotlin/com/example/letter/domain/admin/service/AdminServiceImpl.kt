@@ -2,10 +2,8 @@ package com.example.letter.domain.admin.service
 
 import com.example.letter.common.exception.HttpMessageNotReadableException
 import com.example.letter.common.exception.ModelNotFoundException
-import com.example.letter.domain.letter.dto.LetterPageResponse
 import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
-import com.example.letter.domain.letter.model.Letter
 import com.example.letter.domain.letter.model.toResponse
 import com.example.letter.domain.letter.repository.LetterRepository
 import com.example.letter.domain.like.repository.LikeRepository

@@ -8,8 +8,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
+import org.hibernate.annotations.SQLRestriction
 
 @Entity
+@SQLRestriction("is_deleted = false")
 @Table(name = "letter")
 class Letter(
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,6 +36,9 @@ class Letter(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
+    fun deleteLetter() {
+        isDeleted = true
+    }
 }
 
 fun Letter.toResponse(): LetterResponse {

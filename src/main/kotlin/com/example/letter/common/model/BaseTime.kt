@@ -22,4 +22,7 @@ abstract class BaseTime {
     @Column(nullable = false, updatable = false)
     var updatedAt: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH-mm"))
         protected set
+
+    @Column(name = "is_deleted")
+    var isDeleted: Boolean = false
 }

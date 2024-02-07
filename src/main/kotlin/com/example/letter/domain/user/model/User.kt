@@ -11,8 +11,10 @@ import com.example.letter.domain.user.dto.UserResponse
 import com.example.letter.domain.user.repository.UserRepository
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
+import org.hibernate.annotations.SQLRestriction
 
 @Entity
+@SQLRestriction("is_deleted = false")
 @Table(name = "app_user")
 class User(
     @Column(name = "nickname", nullable = false)
@@ -47,10 +49,9 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
-    fun removeLetter(letter: Letter) {
-        letters.remove(letter)
+    fun deleteUser() {
+        isDeleted = true
     }
-
 }
 
 fun User.toResponse(): UserResponse {

@@ -58,4 +58,10 @@ class UserServiceImpl(
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         return user.toResponse()
     }
+
+    override fun deleteUser(userId: Long) {
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        user.deleteUser()
+        userRepository.save(user)
+    }
 }

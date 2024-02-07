@@ -44,4 +44,17 @@ class UserController(
     ): ResponseEntity<UserResponse> {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(userId))
     }
+
+    @Operation(summary = "User 삭제")
+    @PreAuthorize("hasRole('ADMIN') or #userPrincipal.id == #userId")
+    @DeleteMapping("/users/{userId}")
+    fun DeleteUser(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @PathVariable userId: Long
+    ): ResponseEntity<Unit> {
+        userService.deleteUser(userId)
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build()
+    }
 }

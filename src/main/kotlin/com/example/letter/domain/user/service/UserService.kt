@@ -13,4 +13,6 @@ interface UserService {
 
     fun getUser(userId: Long): UserResponse
 
+    fun deleteUser(userId: Long)
+
 }
