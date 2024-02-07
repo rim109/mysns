@@ -1,11 +1,6 @@
 package com.example.letter.domain.like.service
 
-import com.example.letter.common.exception.LikeException
 import com.example.letter.common.exception.ModelNotFoundException
-import com.example.letter.domain.letter.dto.LetterPageResponse
-import com.example.letter.domain.letter.dto.LetterResponse
-import com.example.letter.domain.letter.model.Letter
-import com.example.letter.domain.letter.model.toResponse
 import com.example.letter.domain.letter.repository.LetterRepository
 import com.example.letter.domain.like.dto.LikePageResponse
 import com.example.letter.domain.like.dto.LikeResponse
@@ -32,13 +27,9 @@ class LikeServiceImpl(
 
         return if (liking == null) {
             val likes = likeRepository.save(Like(letter = letter, user = user, liked = true))
-            if (letter.user.id != userId) {
                 letter.numLike++
                 letterRepository.save(letter)
                 likes.toResponse()
-            } else {
-                throw LikeException(letterId, userId)
-            }
         } else {
             likeRepository.delete(liking)
             letter.numLike--
