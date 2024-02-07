@@ -33,7 +33,7 @@ class AdminController(
     }
 
     @Operation(summary = "letter 전체 페이지 네이션 조회")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/letters/page")
     fun getLetterPage(
         @RequestParam(defaultValue = "1") pageNumber: Int,
