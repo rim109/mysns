@@ -33,24 +33,6 @@ class AdminServiceImpl(
         return letterRepository.findAll().map { it.toResponse() }
     }
 
-    override fun getLetterPage(
-        pageNumber: Int,
-        pageSize: Int,
-        sort: String?,
-        direction: Sort.Direction
-    ): LetterPageResponse {
-        val pageable: PageRequest = PageRequest.of(pageNumber - 1, pageSize, direction, sort)
-        val lettersPage: Page<Letter> = letterRepository.findAll(pageable)
-        val letterResponseList: List<LetterResponse> = lettersPage.content.map { it.toResponse() }
-
-        return LetterPageResponse(
-            content = letterResponseList,
-            totalPages = lettersPage.totalPages,
-            totalLetter = lettersPage.totalElements
-        )
-    }
-
-
     @Transactional
     override fun adminUpdateLetter(userId: Long, letterId: Long, request: LetterRequest): LetterResponse {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter", letterId)

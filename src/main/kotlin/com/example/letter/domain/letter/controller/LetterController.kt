@@ -2,11 +2,13 @@ package com.example.letter.domain.letter.controller
 
 import com.example.letter.common.security.jwt.UserPrincipal
 import com.example.letter.domain.letter.dto.DeleteLetterRequest
+import com.example.letter.domain.letter.dto.LetterPageResponse
 import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
 import com.example.letter.domain.letter.service.LetterService
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -17,6 +19,19 @@ import org.springframework.web.bind.annotation.*
 class LetterController(
     private val letterService: LetterService
 ) {
+    @Operation(summary = "letter 전체 페이지 네이션 조회")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @GetMapping("/letters")
+    fun getLetterPage(
+        @RequestParam(defaultValue = "1") pageNumber: Int,
+        @RequestParam(defaultValue = "5") pageSize: Int,
+        @RequestParam(defaultValue = "createdAt") sort: String?,
+        @RequestParam direction: Sort.Direction
+    ): ResponseEntity<LetterPageResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(letterService.getLetterPage(pageNumber, pageSize, sort, direction))
+    }
 
     @Operation(summary = "letter 단건 조회")
     @PreAuthorize("#userPrincipal.id == #userId")

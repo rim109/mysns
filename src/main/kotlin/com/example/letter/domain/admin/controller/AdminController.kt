@@ -3,7 +3,6 @@ package com.example.letter.domain.admin.controller
 import com.example.letter.common.exception.dto.BaseResponse
 import com.example.letter.common.security.jwt.UserPrincipal
 import com.example.letter.domain.admin.service.AdminService
-import com.example.letter.domain.letter.dto.LetterPageResponse
 import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
 import com.example.letter.domain.user.dto.UserPageResponse
@@ -30,20 +29,6 @@ class AdminController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(adminService.getLetterList())
-    }
-
-    @Operation(summary = "letter 전체 페이지 네이션 조회")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @GetMapping("/letters/page")
-    fun getLetterPage(
-        @RequestParam(defaultValue = "1") pageNumber: Int,
-        @RequestParam(defaultValue = "5") pageSize: Int,
-        @RequestParam(defaultValue = "createdAt") sort: String?,
-        @RequestParam direction: Sort.Direction
-    ): ResponseEntity<LetterPageResponse> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(adminService.getLetterPage(pageNumber, pageSize, sort, direction))
     }
 
     @Operation(summary = "letter 수정 ONLY ADMIN")
@@ -83,7 +68,7 @@ class AdminController(
 
     @Operation(summary = "user 전체 페이지 네이션 조회 ONLY ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/users/page")
+    @GetMapping("/users")
     fun getUserPage(
         @RequestParam(defaultValue = "1") pageNumber: Int,
         @RequestParam(defaultValue = "5") pageSize: Int,

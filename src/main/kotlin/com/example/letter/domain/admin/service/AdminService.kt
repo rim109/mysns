@@ -1,6 +1,5 @@
 package com.example.letter.domain.admin.service
 
-import com.example.letter.domain.letter.dto.LetterPageResponse
 import com.example.letter.domain.letter.dto.LetterRequest
 import com.example.letter.domain.letter.dto.LetterResponse
 import com.example.letter.domain.user.dto.UserPageResponse
@@ -20,6 +19,4 @@ interface AdminService {
     fun getUserPage(pageNumber: Int, pageSize: Int, sort: String?, direction: Sort.Direction): UserPageResponse
 
     fun updateUser(userId: Long, request: UserUpdate): String
-
-    fun getLetterPage(pageNumber: Int, pageSize: Int, sort: String?, direction: Sort.Direction): LetterPageResponse
 }
