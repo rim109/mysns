@@ -19,7 +19,7 @@ abstract class BaseTime {
         protected set
 
     @LastModifiedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     var updatedAt: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH-mm"))
         protected set
 
