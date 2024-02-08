@@ -1,5 +1,6 @@
 package com.example.letter.domain.letter.service
 
+import com.example.letter.common.exception.InvalidInputException
 import com.example.letter.common.exception.InvalidPasswordException
 import com.example.letter.common.exception.ModelNotFoundException
 import com.example.letter.domain.letter.dto.DeleteLetterRequest
@@ -27,7 +28,13 @@ class LetterServiceImpl(
     private val passwordEncoder: PasswordEncoder
 ) : LetterService {
     override fun getLetter(userId: Long, letterId: Long): LetterResponse {
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User",userId)
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter",letterId)
+
+        if(user.id != letter.user.id){
+            throw InvalidInputException("Invalid input")
+        }
+
         val numLiked = likeRepository.countLikeByLetterId(letterId)
         letter.numLike = numLiked
 
