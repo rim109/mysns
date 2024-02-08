@@ -65,6 +65,12 @@ class CustomExceptionHandler {
             .body(ErrorResponse(e.message))
     }
 
+    @ExceptionHandler(PhoneNumberExistException::class)
+    fun handlePhoneNumberExistException(e: PhoneNumberExistException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse(e.message))
+    }
     @ExceptionHandler(PasswordMismatchException::class)
     fun handlePasswordMismatchException(e: PasswordMismatchException): ResponseEntity<ErrorResponse> {
         return ResponseEntity
