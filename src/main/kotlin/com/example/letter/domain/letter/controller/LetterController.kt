@@ -25,7 +25,7 @@ class LetterController(
     fun getLetterPage(
         @RequestParam(defaultValue = "1") pageNumber: Int,
         @RequestParam(defaultValue = "5") pageSize: Int,
-        @RequestParam(defaultValue = "createdAt") sort: String?,
+        @RequestParam(defaultValue = "userId") sort: String?,
         @RequestParam direction: Sort.Direction
     ): ResponseEntity<LetterPageResponse> {
         return ResponseEntity
