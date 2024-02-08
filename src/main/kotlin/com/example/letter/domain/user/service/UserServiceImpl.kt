@@ -20,7 +20,7 @@ class UserServiceImpl(
     private val jwtPlugin: JwtPlugin
 ) : UserService {
     override fun signup(request: SignupRequest): UserResponse {
-        checkingEmailAndNicknameExists(request.email, request.nickname, userRepository)
+        checkingEmailAndNicknameAndPhoneNumberExists(request.email, request.nickname, request.phoneNumber,userRepository)
         passwordNoHaveNickname(request.nickname,request.password)
         passwordMisMatch(request.password, request.passwordConfirm)
 

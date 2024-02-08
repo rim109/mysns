@@ -7,3 +7,7 @@ data class EmailExistException(val nickname: String) : RuntimeException(
 data class NicknameExistException(val nickname: String) : RuntimeException(
     "이미 존재하는 닉네임입니다."
 )
+
+data class PhoneNumberExistException(val phoneNumber: String) : RuntimeException(
+    "이미 존재하는 전화번호입니다."
+)

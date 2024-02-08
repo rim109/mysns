@@ -1,9 +1,6 @@
 package com.example.letter.domain.user.model
 
-import com.example.letter.common.exception.EmailExistException
-import com.example.letter.common.exception.NicknameExistException
-import com.example.letter.common.exception.PasswordMismatchException
-import com.example.letter.common.exception.PasswordNoHaveNicknameException
+import com.example.letter.common.exception.*
 import com.example.letter.common.model.BaseTime
 import com.example.letter.domain.letter.model.Letter
 import com.example.letter.domain.letter.model.toResponse
@@ -43,6 +40,9 @@ class User(
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val letters: MutableList<Letter> = mutableListOf(),
 
+    @Enumerated(EnumType.STRING)
+    val reportedUser: ReportUser = ReportUser.NORMAL
+
 
     ) : BaseTime() {
     @Id
@@ -69,13 +69,17 @@ fun User.toResponse(): UserResponse {
     )
 }
 
-fun checkingEmailAndNicknameExists(email: String, nickname: String, userRepository: UserRepository) {
+fun checkingEmailAndNicknameAndPhoneNumberExists(email: String, nickname: String, phoneNumber: String, userRepository: UserRepository) {
     if (userRepository.existsByEmail(email)) {
         throw EmailExistException(email)
     }
 
     if (userRepository.existsByNickname(nickname)) {
         throw NicknameExistException(nickname)
+    }
+
+    if (userRepository.existsByPhoneNumber(phoneNumber)) {
+        throw PhoneNumberExistException(phoneNumber)
     }
 }
 
