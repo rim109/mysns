@@ -4,6 +4,7 @@ import com.example.letter.common.exception.*
 import com.example.letter.common.model.BaseTime
 import com.example.letter.domain.letter.model.Letter
 import com.example.letter.domain.letter.model.toResponse
+import com.example.letter.domain.user.dto.UpdateUserRequest
 import com.example.letter.domain.user.dto.UserResponse
 import com.example.letter.domain.user.repository.UserRepository
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -40,8 +41,8 @@ class User(
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val letters: MutableList<Letter> = mutableListOf(),
 
-    @Enumerated(EnumType.STRING)
-    val reportedUser: ReportUser = ReportUser.NORMAL
+    @Column(nullable = false)
+    val reported: Boolean
 
 
     ) : BaseTime() {
@@ -52,6 +53,21 @@ class User(
     fun deleteUser() {
         isDeleted = true
     }
+    fun isReported(): Boolean {
+        return this.reported
+    }
+
+    fun isSameMemberId(id: Long): Boolean {
+        return this.id == id
+    }
+
+    fun updateUser(request: UpdateUserRequest){
+        nickname = request.nickname
+        phoneNumber = request.phoneNumber
+        info = request.info
+    }
+
+
 }
 
 fun User.toResponse(): UserResponse {

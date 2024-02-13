@@ -3,10 +3,7 @@ package com.example.letter.domain.user.service
 import com.example.letter.common.exception.InvalidRoleException
 import com.example.letter.common.exception.ModelNotFoundException
 import com.example.letter.common.security.jwt.JwtPlugin
-import com.example.letter.domain.user.dto.LoginRequest
-import com.example.letter.domain.user.dto.LoginResponse
-import com.example.letter.domain.user.dto.SignupRequest
-import com.example.letter.domain.user.dto.UserResponse
+import com.example.letter.domain.user.dto.*
 import com.example.letter.domain.user.model.*
 import com.example.letter.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -36,7 +33,8 @@ class UserServiceImpl(
                     "USER" -> UserRole.USER
                     "ADMIN" -> UserRole.ADMIN
                     else -> throw InvalidRoleException(request.role)
-                }
+                },
+                reported = false
             )
         )
         return users.toResponse()
@@ -56,6 +54,13 @@ class UserServiceImpl(
 
     override fun getUser(userId: Long): UserResponse {
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        return user.toResponse()
+    }
+
+    override fun updateUser(userId: Long, request: UpdateUserRequest): UserResponse {
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        user.updateUser(request)
+        userRepository.save(user)
         return user.toResponse()
     }
 

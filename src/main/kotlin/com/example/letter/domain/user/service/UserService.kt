@@ -1,9 +1,6 @@
 package com.example.letter.domain.user.service
 
-import com.example.letter.domain.user.dto.LoginRequest
-import com.example.letter.domain.user.dto.LoginResponse
-import com.example.letter.domain.user.dto.SignupRequest
-import com.example.letter.domain.user.dto.UserResponse
+import com.example.letter.domain.user.dto.*
 
 interface UserService {
 
@@ -12,6 +9,8 @@ interface UserService {
     fun login(request: LoginRequest): LoginResponse
 
     fun getUser(userId: Long): UserResponse
+
+    fun updateUser(userId: Long, request: UpdateUserRequest): UserResponse
 
     fun deleteUser(userId: Long)
 

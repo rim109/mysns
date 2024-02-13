@@ -1,10 +1,7 @@
 package com.example.letter.domain.user.controller
 
 import com.example.letter.common.security.jwt.UserPrincipal
-import com.example.letter.domain.user.dto.LoginRequest
-import com.example.letter.domain.user.dto.LoginResponse
-import com.example.letter.domain.user.dto.SignupRequest
-import com.example.letter.domain.user.dto.UserResponse
+import com.example.letter.domain.user.dto.*
 import com.example.letter.domain.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -45,6 +42,18 @@ class UserController(
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(userId))
     }
 
+    @Operation(summary = "User 수정")
+    @PreAuthorize("#userPrincipal.id == #userId")
+    @PatchMapping("/users/{userId}")
+    fun updateUser(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @PathVariable userId: Long,
+        @RequestBody request: UpdateUserRequest
+    ): ResponseEntity<UserResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(userService.updateUser(userId,request))
+    }
     @Operation(summary = "User 삭제")
     @PreAuthorize("hasRole('ADMIN') or #userPrincipal.id == #userId")
     @DeleteMapping("/users/{userId}")
