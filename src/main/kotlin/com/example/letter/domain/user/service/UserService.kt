@@ -13,5 +13,4 @@ interface UserService {
     fun updateUser(userId: Long, request: UpdateUserRequest): UserResponse
 
     fun deleteUser(userId: Long)
-
 }
