@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class LikeServiceImpl(
@@ -20,6 +21,8 @@ class LikeServiceImpl(
     private val letterRepository: LetterRepository,
     private val likeRepository: LikeRepository
 ) : LikeService {
+
+    @Transactional
     override fun likeLetter(letterId: Long, userId: Long): LikeResponse {
         val letter = letterRepository.findByIdOrNull(letterId) ?: throw ModelNotFoundException("Letter", letterId)
         val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
@@ -27,9 +30,9 @@ class LikeServiceImpl(
 
         return if (liking == null) {
             val likes = likeRepository.save(Like(letter = letter, user = user, liked = true))
-                letter.numLike++
-                letterRepository.save(letter)
-                likes.toResponse()
+            letter.numLike++
+            letterRepository.save(letter)
+            likes.toResponse()
         } else {
             likeRepository.delete(liking)
             letter.numLike--
