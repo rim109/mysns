@@ -1,5 +1,6 @@
 package com.example.letter.domain.user.repository
 
+import com.example.letter.common.model.BaseTime
 import com.example.letter.domain.user.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDateTime
@@ -9,9 +10,9 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun findByNickname(nickname: String): User?
 
-    fun findByDeleted(iSDeleted: Boolean): Boolean
-
-    fun deleteAutoUser(time: LocalDateTime)
+//    fun findByDeleted(iSDeleted: Boolean): Boolean
+//
+//    fun deleteAutoUser(timeStamp: LocalDateTime)
 
     fun existsByEmail(email: String): Boolean
 
