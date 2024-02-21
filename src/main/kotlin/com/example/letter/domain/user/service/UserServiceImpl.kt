@@ -6,7 +6,6 @@ import com.example.letter.common.security.jwt.JwtPlugin
 import com.example.letter.domain.user.dto.*
 import com.example.letter.domain.user.model.*
 import com.example.letter.domain.user.repository.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -81,14 +80,10 @@ class UserServiceImpl(
         userRepository.save(user)
     }
 
-//    @Transactional
-//    fun deleteAutoUser() {
-//        val noHaveUser = userRepository.findByDeleted(true)
-//        if (noHaveUser) {
-//            val nowTime = LocalDateTime.now()
-//            val userDeleteAuto = nowTime.minusDays(90)
-//
-//            userRepository.deleteAutoUser(userDeleteAuto)
-//        }
-//    }
+    @Scheduled
+    fun deleteAutoUser() {
+        val nowTime = LocalDateTime.now()
+        val userDeleteAuto = nowTime.minusDays(90)
+        userRepository.deleteUserByDeletedAndCreatedAtLessThanEqual(true,userDeleteAuto.toString())
+    }
 }

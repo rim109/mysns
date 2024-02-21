@@ -12,7 +12,6 @@ import jakarta.persistence.*
 import org.hibernate.annotations.SQLRestriction
 
 @Entity
-@SQLRestriction("is_deleted = false")
 @Table(name = "app_user")
 class User(
     @Column(name = "nickname", nullable = false)

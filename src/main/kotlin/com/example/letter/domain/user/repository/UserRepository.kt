@@ -12,7 +12,7 @@ interface UserRepository : JpaRepository<User, Long> {
 
 //    fun findByDeleted(iSDeleted: Boolean): Boolean
 //
-//    fun deleteAutoUser(timeStamp: LocalDateTime)
+    fun deleteUserByDeletedAndCreatedAtLessThanEqual(deleted: Boolean, createdAt: String)
 
     fun existsByEmail(email: String): Boolean
 
