@@ -1,9 +1,7 @@
 package com.example.letter.domain.user.repository
 
-import com.example.letter.common.model.BaseTime
 import com.example.letter.domain.user.model.User
 import org.springframework.data.jpa.repository.JpaRepository
-import java.time.LocalDateTime
 
 interface UserRepository : JpaRepository<User, Long> {
     fun findByEmail(email: String): User?
@@ -18,5 +16,5 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun existsByNickname(nickname: String): Boolean
 
-    fun existsByPhoneNumber(PhoneNumber: String): Boolean
+    fun existsByPhoneNumber(phoneNumber: String): Boolean
 }
